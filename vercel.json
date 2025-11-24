@@ -8,18 +8,37 @@
     {
       "src": "autoplay.mp3",
       "use": "@vercel/static"
+    },
+    {
+      "src": "*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.css",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    },
-    {
       "src": "/autoplay.mp3",
       "dest": "/autoplay.mp3",
       "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable",
         "Content-Type": "audio/mpeg"
+      }
+    },
+    {
+      "src": "/(.*\\.(js|css))",
+      "dest": "/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
       }
     }
   ],
@@ -32,12 +51,20 @@
           "value": "DENY"
         },
         {
-          "key": "X-Content-Type-Options",
+          "key": "X-Content-Type-Options", 
           "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         },
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "autoplay=*"
         }
       ]
     },
@@ -46,13 +73,25 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=86400"
+          "value": "public, max-age=31536000, immutable"
         },
         {
-          "key": "Content-Type",
+          "key": "Content-Type", 
           "value": "audio/mpeg"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "*.html": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "NODE_VERSION": "18"
+  }
 }

@@ -15,12 +15,12 @@ def get_vehicle_info(vehicle_number):
     try:
         print(f"Fetching data for vehicle: {vehicle_number}")
         
-        # TUMHARA EXACT API CALL
-        response = requests.get(f'https://vahan.vishalboss.sbs/fetch_rc.php?rc={vehicle_number}')
+        # NEW API CALL
+        response = requests.get(f'https://vechileinfoapi.anshppt19.workers.dev/api/rc?number={vehicle_number}')
         
         if response.status_code == 200:
             data = response.json()
-            print("Data fetched successfully from YOUR API")
+            print("Data fetched successfully from NEW API")
             return jsonify({
                 'success': True,
                 'data': data

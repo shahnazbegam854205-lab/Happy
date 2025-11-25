@@ -21,6 +21,13 @@ def get_vehicle_info(vehicle_number):
         if response.status_code == 200:
             data = response.json()
             print("Data fetched successfully from NEW API")
+            
+            # Remove credit and developer fields from response
+            if 'credit' in data:
+                del data['credit']
+            if 'developer' in data:
+                del data['developer']
+            
             return jsonify({
                 'success': True,
                 'data': data
